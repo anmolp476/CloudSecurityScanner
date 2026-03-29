@@ -21,9 +21,9 @@ app.post('/scan', async (req, res) => {
 
     const findings = [];
 
-    scanS3(findings, accessKeyId, secretAccessKey);
-    scanIAM(findings, accessKeyId, secretAccessKey);
-    scanRDS(findings, accessKeyId, secretAccessKey);
+    await scanS3(findings, accessKeyId, secretAccessKey);
+    await scanIAM(findings, accessKeyId, secretAccessKey);
+    await scanRDS(findings, accessKeyId, secretAccessKey);
 
     console.log('Findings:', findings);
 
