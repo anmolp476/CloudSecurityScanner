@@ -20,6 +20,7 @@ interface PostRequest {
 const Login = () => {
   const [accessKeyId, setAccessKeyId] = useState("");
   const [secretAccessKey, setSecretAccessKey] = useState("");
+  const [error, setError] = useState("");
   const setFindings = useScanStore((state) => state.setFindings)
   const navigate = useNavigate()
 
@@ -41,6 +42,7 @@ const Login = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
+        setError(errorData.message || "Invalid Credentials")
         throw new Error(errorData.message || "POST returned invalid data");
       }
 
@@ -49,6 +51,7 @@ const Login = () => {
       setFindings(result.findings);
       navigate("/dashboard");
     } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong")
       console.log(err);
     }
   };
@@ -89,6 +92,12 @@ const Login = () => {
               className="w-full bg-gray-800 text-white rounded-lg px-4 py-3 text-sm border border-gray-700 focus:outline-none focus:border-blue-500"
             />
           </div>
+
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm rounded-lg px-4 py-3">
+              {error}
+            </div>
+          )}
 
           <button
             onClick={handleSubmit}
