@@ -1,8 +1,57 @@
 import { useState } from "react";
+import { useScanStore } from "../store"
+import { useNavigate } from "react-router-dom";
+
+interface Finding {
+  resource: string;
+  rule: string;
+  severity: string;
+}
+
+interface PostResponse {
+  findings: Finding[];
+}
+
+interface PostRequest {
+  accessKeyId: string;
+  secretAccessKey: string;
+}
 
 const Login = () => {
   const [accessKeyId, setAccessKeyId] = useState("");
   const [secretAccessKey, setSecretAccessKey] = useState("");
+  const setFindings = useScanStore((state) => state.setFindings)
+  const navigate = useNavigate()
+
+  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    const postData: PostRequest = {
+      accessKeyId: accessKeyId.trim(),
+      secretAccessKey: secretAccessKey.trim(),
+    };
+    console.log("Sending:", JSON.stringify(postData));
+    try {
+      const response = await fetch("http://localhost:3000/scan", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(postData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "POST returned invalid data");
+      }
+
+      const result: PostResponse = await response.json();
+      console.log(result);
+      setFindings(result.findings);
+      navigate("/dashboard");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4">
@@ -41,7 +90,10 @@ const Login = () => {
             />
           </div>
 
-          <button className="w-full cursor-pointer bg-blue-600 hover:bg-blue-500 text-white rounded-lg px-4 py-3 text-sm font-medium transition-colors mt-2">
+          <button
+            onClick={handleSubmit}
+            className="w-full cursor-pointer bg-blue-600 hover:bg-blue-500 text-white rounded-lg px-4 py-3 text-sm font-medium transition-colors mt-2"
+          >
             Start Scan
           </button>
         </div>
