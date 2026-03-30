@@ -21,10 +21,13 @@ app.post('/scan', async (req, res) => {
 
     const findings = [];
 
-    await scanS3(findings, accessKeyId, secretAccessKey);
-    await scanIAM(findings, accessKeyId, secretAccessKey);
-    await scanRDS(findings, accessKeyId, secretAccessKey);
-
+    try {
+        await scanS3(findings, accessKeyId, secretAccessKey);
+        await scanIAM(findings, accessKeyId, secretAccessKey);
+        await scanRDS(findings, accessKeyId, secretAccessKey);
+    } catch (err) {
+        res.status(500).json({ message: err.message })
+    }
     console.log('Findings:', findings);
 
     // scanning logic goes here
