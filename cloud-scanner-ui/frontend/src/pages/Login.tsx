@@ -21,6 +21,7 @@ const Login = () => {
   const [accessKeyId, setAccessKeyId] = useState("");
   const [secretAccessKey, setSecretAccessKey] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const setFindings = useScanStore((state) => state.setFindings)
   const navigate = useNavigate()
 
@@ -32,6 +33,8 @@ const Login = () => {
     };
     console.log("Sending:", JSON.stringify(postData));
     try {
+      setIsLoading(true);
+
       const response = await fetch("http://localhost:3000/scan", {
         method: "POST",
         headers: {
@@ -53,7 +56,11 @@ const Login = () => {
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong")
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
+
+
   };
 
   return (
@@ -101,9 +108,10 @@ const Login = () => {
 
           <button
             onClick={handleSubmit}
+            disabled = {isLoading ? true : false}
             className="w-full cursor-pointer bg-blue-600 hover:bg-blue-500 text-white rounded-lg px-4 py-3 text-sm font-medium transition-colors mt-2"
           >
-            Start Scan
+            {isLoading ? "Scanning..." : "Start Scan"}
           </button>
         </div>
 
