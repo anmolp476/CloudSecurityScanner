@@ -35,7 +35,7 @@ const Login = () => {
     try {
       setIsLoading(true);
 
-      const response = await fetch(import.meta.env.VITE_API_URL + '/scan', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/scan`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
