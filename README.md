@@ -1,7 +1,6 @@
 # Cloud Scanner
 
-A simplified AWS misconfiguration scanner built for small startups and developers who want clear, actionable security insights without the complexity of tools like AWS Security Hub.
-
+A simple AWS security scanner built for small startups or developers who just want a clear-cut security insight without extra complexity of tools like AWS Security Hub. 
 ## What it does
 
 Scans your AWS account for common security misconfigurations across three categories:
@@ -10,7 +9,7 @@ Scans your AWS account for common security misconfigurations across three catego
 - **IAM** — detects users without MFA enabled  
 - **RDS** — detects publicly accessible database instances
 
-Results are displayed in plain English with severity ratings — no AWS expertise required.
+The results are displayed in plain English with severity ratings, no AWS expertise required :D. 
 
 ## Tech stack
 
@@ -41,9 +40,11 @@ Then open `http://localhost:5173` and enter your AWS Access Key ID and Secret Ac
 
 ## Security
 
-Credentials are never stored — they are used only for the duration of the scan and discarded when you close the tab.
+This obviously looks scary since it's dealing with your credentials, but no need to worry as they are never stored and they are used only for the duration of the scan and discarded when you close the tab.
 
 ## Future improvements
+
+These are some things I might add in the future(after exams :p)
 
 - Add more scan categories (CloudTrail, VPC security groups)
 - Remediation steps for each finding
